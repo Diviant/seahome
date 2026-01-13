@@ -9,7 +9,6 @@ import OwnerDashboardPage from './pages/OwnerDashboardPage';
 import AddPropertyPage from './pages/AddPropertyPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 
-// Curated pool of high-quality coastal property image IDs from Unsplash
 const IMAGE_POOL = [
   '1512917774080-9991f1c4c750', '1613490493576-7fde63acd811', '1566073771259-6a8506099945',
   '1522708323590-d24dbb6b0267', '1582719478250-c89cae4dc85b', '1542314831-068cd1dbfeeb',
@@ -48,7 +47,7 @@ const generateMockProperties = (count: number): Property[] => {
       ownerId: `owner-${Math.floor(i / 10)}`,
       ownerUsername: `user_host_${i}`,
       title: `${type} "${['Альбатрос', 'Уют', 'Прибой', 'Маяк', 'Берег', 'Жемчужина', 'Ривьера', 'Сказка', 'Лазурь', 'Бриз', 'Горизонт', 'Тихая Гавань'][Math.floor(Math.random() * 12)]} ${i}"`,
-      description: `Превосходный ${type.toLowerCase()} в самом сердце курортного города ${city}. Здесь вас ждет уютная атмосфера, современный интерьер и всё необходимое для незабываемого отдыха у моря. Мы позаботились о каждой мелочи.`,
+      description: `Превосходный ${type.toLowerCase()} в самом сердце курортного города ${city}. Здесь вас ждет уютная атмосфера, современный интерьер и всё необходимое для отдыха.`,
       type,
       country: region === 'Турция' ? 'Турция' : region === 'Грузия' ? 'Грузия' : region === 'Абхазия' ? 'Абхазия' : 'Россия',
       region,
@@ -93,7 +92,7 @@ const INITIAL_PROPERTIES: Property[] = [
     isVerified: true,
     isFeatured: true,
   },
-  ...generateMockProperties(99)
+  ...generateMockProperties(20)
 ];
 
 const Navigation: React.FC<{ user: User }> = ({ user }) => {
@@ -111,7 +110,7 @@ const Navigation: React.FC<{ user: User }> = ({ user }) => {
 
   return (
     <div className="fixed bottom-6 left-0 right-0 z-[60] px-8 safe-bottom pointer-events-none">
-      <nav className="max-w-xs mx-auto bg-slate-900/40 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] flex justify-around items-center h-18 p-1.5 shadow-[0_20px_40px_rgba(0,0,0,0.6)] pointer-events-auto">
+      <nav className="max-w-[280px] mx-auto bg-slate-900/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] flex justify-around items-center h-18 p-1.5 shadow-[0_20px_40px_rgba(0,0,0,0.6)] pointer-events-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
@@ -119,17 +118,17 @@ const Navigation: React.FC<{ user: User }> = ({ user }) => {
               key={item.id}
               onClick={() => navigate(item.path)}
               className={`relative flex flex-col items-center justify-center w-full h-14 space-y-1 transition-all duration-500 rounded-3xl ${
-                isActive ? 'text-white' : 'text-slate-500'
+                isActive ? 'text-cyan-400' : 'text-slate-500'
               }`}
             >
               <div className={`transition-all duration-500 transform ${isActive ? 'scale-110 -translate-y-0.5' : ''}`}>
                   {item.icon}
               </div>
-              <span className={`text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
+              <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
                 {item.label}
               </span>
               {isActive && (
-                <div className="absolute -bottom-1 w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+                <div className="absolute -bottom-1 w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_12px_rgba(34,211,238,1)] animate-pulse"></div>
               )}
             </button>
           );
@@ -143,42 +142,37 @@ const Header: React.FC<{ currentUser: User, setCurrentUser: (u: User) => void }>
   const navigate = useNavigate();
   return (
     <header className="px-5 py-5 bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between sticky top-0 z-40">
-      <div 
-        onClick={() => navigate('/')}
-        className="flex items-center space-x-3 cursor-pointer active:scale-95 transition-all group"
-      >
-        <div className="w-11 h-11 bg-gradient-to-tr from-cyan-600 to-teal-400 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-cyan-900/40 border border-white/20">
+      <div onClick={() => navigate('/')} className="flex items-center space-x-3 cursor-pointer">
+        <div className="w-10 h-10 bg-gradient-to-tr from-cyan-600 to-teal-400 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-900/40">
           <Icons.Waves />
         </div>
         <div>
-          <h1 className="font-extrabold text-xl tracking-tight text-white leading-none">SeaHome</h1>
-          <span className="text-[9px] font-black text-cyan-400/90 uppercase tracking-[0.2em] mt-1 block">Coastal Boutique</span>
+          <h1 className="font-extrabold text-lg text-white leading-none">SeaHome</h1>
+          <span className="text-[8px] font-black text-cyan-400 uppercase tracking-widest block mt-1">Coastal</span>
         </div>
       </div>
-      <div className="flex items-center">
-        <div className="relative">
-          <select 
-            className="text-[10px] font-black uppercase tracking-wider bg-white/5 text-cyan-100 px-4 py-2.5 rounded-2xl border border-white/10 hover:border-cyan-500/50 appearance-none text-center cursor-pointer transition-all pr-8 outline-none"
-            value={currentUser.role}
-            onChange={(e) => setCurrentUser({...currentUser, role: e.target.value as any})}
-          >
-            <option value="guest">Гость</option>
-            <option value="owner">Хозяин</option>
-            <option value="admin">Админ</option>
-          </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500">
-            <Icons.Filter />
-          </div>
-        </div>
-      </div>
+      <select 
+        className="text-[10px] font-black uppercase tracking-wider bg-white/5 text-cyan-100 px-3 py-2 rounded-xl border border-white/10 outline-none"
+        value={currentUser.role}
+        onChange={(e) => setCurrentUser({...currentUser, role: e.target.value as any})}
+      >
+        <option value="guest">Гость</option>
+        <option value="owner">Хозяин</option>
+        <option value="admin">Админ</option>
+      </select>
     </header>
   );
 };
 
 const App: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>(() => {
-    const saved = localStorage.getItem('seahome_properties_v2');
-    return saved ? JSON.parse(saved) : INITIAL_PROPERTIES;
+    try {
+      const saved = localStorage.getItem('seahome_properties_v2');
+      return saved ? JSON.parse(saved) : INITIAL_PROPERTIES;
+    } catch (e) {
+      console.error("Storage error:", e);
+      return INITIAL_PROPERTIES;
+    }
   });
 
   const [currentUser, setCurrentUser] = useState<User>({
@@ -201,10 +195,10 @@ const App: React.FC = () => {
 
   return (
     <HashRouter>
-      <div className="min-h-screen max-w-md mx-auto bg-[#020617] shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-x-hidden text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+      <div className="min-h-screen max-w-md mx-auto bg-[#020617] shadow-[0_0_80px_rgba(0,0,0,1)] relative overflow-x-hidden text-slate-100 font-sans">
         <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
-        <main className="animate-in fade-in duration-1000 pb-32">
+        <main className="pb-36">
           <Routes>
             <Route path="/" element={<CatalogPage properties={properties.filter(p => p.status === ModerationStatus.APPROVED)} />} />
             <Route path="/property/:id" element={<PropertyDetailsPage properties={properties} />} />

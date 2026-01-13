@@ -24,7 +24,7 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties })
   };
 
   return (
-    <div className="relative pb-40 bg-[#020617]">
+    <div className="relative pb-48 bg-[#020617]">
       {/* Photo Gallery */}
       <div className="h-[450px] w-full overflow-x-auto flex snap-x snap-mandatory hide-scrollbar">
         {property.images.map((img, i) => (
@@ -122,23 +122,23 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties })
         </div>
       </div>
 
-      {/* Premium Sticky Action Bar - RAISED UP */}
-      <div className="fixed bottom-28 left-0 right-0 z-50 p-6 pointer-events-none">
-        <div className="max-w-xs mx-auto bg-[#0f172a]/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-3.5 flex items-center justify-between shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] pointer-events-auto">
-          <div className="pl-4">
-            <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-0.5">Ночь</p>
+      {/* Premium Sticky Action Bar - RAISED UP HIGHER */}
+      <div className="fixed bottom-32 left-0 right-0 z-50 p-6 pointer-events-none">
+        <div className="max-w-[320px] mx-auto bg-[#0f172a]/95 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-3 flex items-center justify-between shadow-[0_40px_80px_-15px_rgba(0,0,0,0.9)] pointer-events-auto">
+          <div className="pl-5">
+            <p className="text-[8px] font-black text-slate-500 uppercase tracking-[0.25em] mb-0.5">Всего за ночь</p>
             <p className="text-lg font-black text-white">{property.pricePerNight} ₽</p>
           </div>
           
           <button
             onClick={handleContactOwner}
-            className="group relative bg-gradient-to-tr from-cyan-600 to-teal-400 hover:from-cyan-500 hover:to-teal-300 text-[#020617] font-black px-6 py-3.5 rounded-[1.75rem] shadow-xl shadow-cyan-500/20 active:scale-95 transition-all flex items-center space-x-2.5 overflow-hidden"
+            className="group relative bg-gradient-to-tr from-cyan-600 to-teal-400 hover:from-cyan-500 hover:to-teal-300 text-[#020617] font-black px-7 py-3.5 rounded-[1.75rem] shadow-xl shadow-cyan-500/20 active:scale-95 transition-all flex items-center space-x-2.5 overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent opacity-50"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-50"></div>
             <svg className="w-5 h-5 relative z-10" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1 23l6.89-1.92A9.957 9.957 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.19 13.59c-.23.65-1.17 1.27-1.6 1.34-.4.07-.9.12-2.73-.62-2.31-.95-3.8-3.29-3.92-3.45-.12-.17-1.01-1.34-1.01-2.55s.62-1.81.84-2.06c.22-.25.48-.31.64-.31s.31.01.44.02c.15.01.35-.06.55.41.2.49.69 1.69.75 1.82.06.13.1.28.01.45-.09.17-.13.28-.27.44s-.27.32-.38.44c-.13.13-.27.27-.12.53.15.26.65 1.07 1.4 1.73.97.86 1.79 1.12 2.05 1.25.26.13.41.11.56-.05.15-.17.65-.75.82-.95.17-.2.35-.17.59-.08.23.09 1.48.7 1.73.83.25.13.41.19.47.3.06.11.06.64-.17 1.29z"/>
             </svg>
-            <span className="text-xs font-black uppercase tracking-tighter relative z-10">Написать</span>
+            <span className="text-xs font-black uppercase tracking-tight relative z-10">Написать</span>
           </button>
         </div>
       </div>
