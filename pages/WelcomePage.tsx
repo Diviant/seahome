@@ -1,18 +1,23 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Changed 'Property' to 'Listing'
 import { Listing } from '../types';
 import { Icons } from '../constants';
 
 interface WelcomePageProps {
-  // Changed 'Property' to 'Listing'
   properties: Listing[];
 }
 
 const WelcomePage: React.FC<WelcomePageProps> = ({ properties }) => {
   const navigate = useNavigate();
-  const featured = properties.filter(p => p.isFeatured).slice(0, 5);
+
+  // Рандомизация избранных объектов при загрузке страницы
+  const randomFeatured = useMemo(() => {
+    return [...properties]
+      .filter(p => p.isFeatured)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 5);
+  }, [properties]);
 
   return (
     <div className="relative min-h-screen bg-[#020617] overflow-hidden">
@@ -56,7 +61,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ properties }) => {
           </div>
           
           <div className="flex space-x-4 overflow-x-auto hide-scrollbar pb-10">
-            {featured.map(p => (
+            {randomFeatured.map(p => (
               <div 
                 key={p.id}
                 onClick={() => navigate(`/property/${p.id}`)}

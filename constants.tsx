@@ -14,55 +14,55 @@ export const REGIONS = [
 
 export const REGION_METADATA: Record<string, { image: string, tag: string }> = {
   'Крым': { 
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80',
     tag: 'Дворцы и горы'
   },
   'Краснодарский край': { 
-    image: 'https://images.unsplash.com/photo-1543967354-33415c912b60?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1543967354-28b9260d50c6?auto=format&fit=crop&w=800&q=80',
     tag: 'Центр отдыха'
   },
   'Кавказские Минеральные Воды': { 
-    image: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80',
     tag: 'Здоровье и релакс'
   },
   'Абхазия': { 
-    image: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80',
     tag: 'Душа Кавказа'
   },
   'Турция': { 
-    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
     tag: 'Все включено'
   },
   'Грузия': { 
-    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
     tag: 'Вино и гостеприимство'
   },
   'Индия': {
-    image: 'https://images.unsplash.com/photo-1512100356956-c1227c331f01?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80',
     tag: 'Йога и океан'
   },
   'Таиланд': {
-    image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=800&q=80',
     tag: 'Острова и Будда'
   },
   'Малайзия': {
-    image: 'https://images.unsplash.com/photo-1540664861053-dac6a3a12555?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=800&q=80',
     tag: 'Джунгли и небоскребы'
   },
   'Индонезия': {
-    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
     tag: 'Серфинг на Бали'
   },
   'ОАЭ': {
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
     tag: 'Роскошь будущего'
   },
   'Египет': {
-    image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?auto=format&fit=crop&w=800&q=80',
     tag: 'Тайны Красного моря'
   },
   'Вьетнам': {
-    image: 'https://images.unsplash.com/photo-1504457047772-27faf1c00561?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1504457047772-27faf1c00561?auto=format&fit=crop&w=800&q=80',
     tag: 'Азиатский уют'
   }
 };
