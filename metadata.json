@@ -1,0 +1,8 @@
+{
+  "name": "SeaHome - Жильё у моря",
+  "description": "Информационный каталог жилья у моря без посредников. Находите гостевые дома, частные дома и отели напрямую от владельцев в Telegram.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
