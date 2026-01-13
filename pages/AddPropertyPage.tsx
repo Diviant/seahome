@@ -32,6 +32,8 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
     validity: '30 days',
     rates: 'RUB -> THB (0.38)',
     hours: '10:00 - 20:00',
+    cuisine: 'Европейская',
+    avgBill: '1500',
     guests: '2',
     amenities: [] as string[],
     images: ['https://picsum.photos/seed/' + Math.random() + '/800/600'],
@@ -44,19 +46,6 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
         ? prev.amenities.filter(item => item !== a)
         : [...prev.amenities, a]
     }));
-  };
-
-  const handleAIGenerate = async () => {
-    if (!formData.title) return alert('Сначала введите название');
-    setLoading(true);
-    const desc = await generateDescription({
-      title: formData.title,
-      type: formData.type,
-      amenities: formData.amenities,
-      distanceToSea: Number(formData.distance)
-    });
-    if (desc) setFormData(prev => ({ ...prev, description: desc }));
-    setLoading(false);
   };
 
   const handleSubmit = () => {
@@ -78,7 +67,9 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
       dataVolume: formData.category === ListingCategory.SIM ? formData.data : undefined,
       validityPeriod: formData.category === ListingCategory.SIM ? formData.validity : undefined,
       exchangeRates: formData.category === ListingCategory.EXCHANGE ? formData.rates : undefined,
-      workingHours: formData.category === ListingCategory.EXCHANGE ? formData.hours : undefined,
+      workingHours: (formData.category === ListingCategory.EXCHANGE || formData.category === ListingCategory.FOOD) ? formData.hours : undefined,
+      cuisineType: formData.category === ListingCategory.FOOD ? formData.cuisine : undefined,
+      averageBill: formData.category === ListingCategory.FOOD ? Number(formData.avgBill) : undefined,
       maxGuests: formData.category === ListingCategory.STAY ? Number(formData.guests) : undefined,
       amenities: formData.amenities,
       images: formData.images,
@@ -95,8 +86,7 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
 
   const currentCategory = formData.category;
   
-  // Для категорий Мото, Сим и Обмен исключаем регионы России из списка выбора
-  const availableRegions = currentCategory === ListingCategory.STAY 
+  const availableRegions = (currentCategory === ListingCategory.STAY || currentCategory === ListingCategory.FOOD) 
     ? REGIONS 
     : REGIONS.filter(r => !russianRegions.includes(r));
 
@@ -124,18 +114,18 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
               <span className="font-black text-white uppercase tracking-widest text-[8px]">Жильё</span>
             </button>
             <button
+              onClick={() => { setFormData({...formData, category: ListingCategory.FOOD, type: PropertyType.RESTAURANT}); setStep(1); }}
+              className="p-6 rounded-[2.5rem] bg-slate-900 border-2 border-slate-800 flex flex-col items-center space-y-3 hover:border-orange-500 transition-all active:scale-95"
+            >
+              <div className="w-10 h-10 bg-orange-500/10 text-orange-400 rounded-2xl flex items-center justify-center"><Icons.Utensils /></div>
+              <span className="font-black text-white uppercase tracking-widest text-[8px]">Еда</span>
+            </button>
+            <button
               onClick={() => { setFormData({...formData, category: ListingCategory.MOTO, type: PropertyType.SCOOTER}); setStep(1); }}
               className="p-6 rounded-[2.5rem] bg-slate-900 border-2 border-slate-800 flex flex-col items-center space-y-3 hover:border-teal-500 transition-all active:scale-95"
             >
               <div className="w-10 h-10 bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
               <span className="font-black text-white uppercase tracking-widest text-[8px]">Мото</span>
-            </button>
-            <button
-              onClick={() => { setFormData({...formData, category: ListingCategory.SIM, type: PropertyType.PREPAID}); setStep(1); }}
-              className="p-6 rounded-[2.5rem] bg-slate-900 border-2 border-slate-800 flex flex-col items-center space-y-3 hover:border-amber-500 transition-all active:scale-95"
-            >
-              <div className="w-10 h-10 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
-              <span className="font-black text-white uppercase tracking-widest text-[8px]">Сим</span>
             </button>
             <button
               onClick={() => { setFormData({...formData, category: ListingCategory.EXCHANGE, type: PropertyType.CASH}); setStep(1); }}
@@ -151,9 +141,10 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
       {step === 1 && (
         <div className="space-y-6 animate-in slide-in-from-right-4">
           <div className="space-y-4">
-            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Тип услуги/объекта</label>
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Тип заведения/услуги</label>
             <div className="grid grid-cols-2 gap-3">
               {(currentCategory === ListingCategory.STAY ? [PropertyType.GUEST_HOUSE, PropertyType.PRIVATE_HOUSE, PropertyType.MINI_HOTEL] : 
+                currentCategory === ListingCategory.FOOD ? [PropertyType.RESTAURANT, PropertyType.CAFE, PropertyType.STREET_FOOD, PropertyType.BAR] :
                 currentCategory === ListingCategory.MOTO ? [PropertyType.SCOOTER, PropertyType.TOURING, PropertyType.CLASSIC] : 
                 currentCategory === ListingCategory.SIM ? [PropertyType.PREPAID, PropertyType.DATA_ONLY, PropertyType.E_SIM] :
                 [PropertyType.CASH, PropertyType.CRYPTO, PropertyType.BANK_TRANSFER]).map(t => (
@@ -170,7 +161,7 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
             </div>
           </div>
           <div className="space-y-3">
-            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Название (Напр. Phuket Money)</label>
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Название (Напр. Sea Breeze Cafe)</label>
             <input
               type="text"
               className="w-full p-5 bg-slate-900 border border-slate-800 rounded-2xl text-white outline-none focus:border-cyan-500"
@@ -206,29 +197,35 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-3">
               <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">
-                {currentCategory === ListingCategory.EXCHANGE ? 'Мин. сумма (₽)' : 'Цена (₽)'}
+                {currentCategory === ListingCategory.EXCHANGE ? 'Мин. сумма (₽)' : 
+                 currentCategory === ListingCategory.FOOD ? 'Средний чек (₽)' : 'Цена (₽)'}
               </label>
-              <input type="number" className="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+              <input type="number" className="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white" 
+                value={currentCategory === ListingCategory.FOOD ? formData.avgBill : formData.price} 
+                onChange={(e) => setFormData({ ...formData, [currentCategory === ListingCategory.FOOD ? 'avgBill' : 'price']: e.target.value })} />
             </div>
             <div className="space-y-3">
               <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block text-ellipsis overflow-hidden whitespace-nowrap">
                 {currentCategory === ListingCategory.STAY ? 'До моря (м)' : 
                  currentCategory === ListingCategory.MOTO ? 'Объем (сс)' : 
-                 currentCategory === ListingCategory.SIM ? 'Трафик (ГБ)' : 'Валюты / Курс'}
+                 currentCategory === ListingCategory.SIM ? 'Трафик (ГБ)' : 
+                 currentCategory === ListingCategory.FOOD ? 'Кухня (напр. Тайская)' : 'Валюты / Курс'}
               </label>
               <input type="text" className="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white" 
                 value={currentCategory === ListingCategory.STAY ? formData.distance : 
                        currentCategory === ListingCategory.MOTO ? formData.engine : 
-                       currentCategory === ListingCategory.SIM ? formData.data : formData.rates} 
+                       currentCategory === ListingCategory.SIM ? formData.data : 
+                       currentCategory === ListingCategory.FOOD ? formData.cuisine : formData.rates} 
                 onChange={(e) => setFormData({ ...formData, [currentCategory === ListingCategory.STAY ? 'distance' : 
                                                             currentCategory === ListingCategory.MOTO ? 'engine' : 
-                                                            currentCategory === ListingCategory.SIM ? 'data' : 'rates']: e.target.value })} />
+                                                            currentCategory === ListingCategory.SIM ? 'data' : 
+                                                            currentCategory === ListingCategory.FOOD ? 'cuisine' : 'rates']: e.target.value })} />
             </div>
           </div>
-          {currentCategory === ListingCategory.EXCHANGE && (
+          {(currentCategory === ListingCategory.EXCHANGE || currentCategory === ListingCategory.FOOD) && (
             <div className="space-y-3">
               <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Время работы</label>
-              <input type="text" className="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white" value={formData.hours} onChange={(e) => setFormData({ ...formData, hours: e.target.value })} />
+              <input type="text" className="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white" placeholder="Напр. 09:00 - 22:00" value={formData.hours} onChange={(e) => setFormData({ ...formData, hours: e.target.value })} />
             </div>
           )}
           <div className="flex space-x-3 pt-4">
@@ -248,6 +245,7 @@ const AddPropertyPage: React.FC<AddPropertyPageProps> = ({ user, onAdd }) => {
             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Теги / Особенности</label>
             <div className="flex flex-wrap gap-2">
               {(currentCategory === ListingCategory.STAY ? AMENITIES : 
+                currentCategory === ListingCategory.FOOD ? ['Вид на море', 'Терраса', 'Живая музыка', 'Детское меню', 'Wi-Fi', 'Доставка'] :
                 currentCategory === ListingCategory.MOTO ? ['Шлем', 'Страховка', 'Багажник'] : 
                 currentCategory === ListingCategory.SIM ? ['5G', 'Безлимит', 'Доставка'] :
                 ['Курьер', 'Безопасно', 'Лучший курс', 'Без комиссии']).map(a => (

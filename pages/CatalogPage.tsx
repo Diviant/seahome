@@ -21,12 +21,12 @@ const CatalogPage: React.FC<CatalogPageProps> = ({ properties }) => {
     region: urlRegion || '', city: urlCity || '', category: ListingCategory.STAY
   });
 
-  // Если регион российский — принудительно сбрасываем категорию на "Жилье"
+  // В регионах России показываем только Жилье и Еду (остальные часто недоступны)
   useEffect(() => {
-    if (isRussia) {
+    if (isRussia && activeCategory !== ListingCategory.STAY && activeCategory !== ListingCategory.FOOD) {
       setActiveCategory(ListingCategory.STAY);
     }
-  }, [urlRegion, isRussia]);
+  }, [urlRegion, isRussia, activeCategory]);
 
   const filteredProperties = useMemo(() => {
     return properties.filter(p => {
@@ -49,9 +49,12 @@ const CatalogPage: React.FC<CatalogPageProps> = ({ properties }) => {
         </div>
       </div>
 
-      {!isRussia && (
-        <div className="flex overflow-x-auto hide-scrollbar p-1.5 bg-slate-900/50 backdrop-blur-xl rounded-[2rem] border border-white/5 shadow-2xl space-x-2">
-          {Object.values(ListingCategory).map((cat) => (
+      <div className="flex overflow-x-auto hide-scrollbar p-1.5 bg-slate-900/50 backdrop-blur-xl rounded-[2rem] border border-white/5 shadow-2xl space-x-2">
+        {Object.values(ListingCategory).map((cat) => {
+          // Скрываем категории, которые не актуальны для РФ (кроме Жилья и Еды)
+          if (isRussia && cat !== ListingCategory.STAY && cat !== ListingCategory.FOOD) return null;
+          
+          return (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -63,13 +66,14 @@ const CatalogPage: React.FC<CatalogPageProps> = ({ properties }) => {
                 {cat === ListingCategory.STAY && <Icons.Home />}
                 {cat === ListingCategory.MOTO && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>}
                 {cat === ListingCategory.SIM && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>}
-                {cat === ListingCategory.EXCHANGE && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>}
+                {cat === ListingCategory.EXCHANGE && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>}
+                {cat === ListingCategory.FOOD && <Icons.Utensils />}
               </div>
               <span className="text-[7px] font-black uppercase tracking-widest px-2">{cat}</span>
             </button>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
 
       <div className="relative group">
         <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-cyan-400 transition-colors"><Icons.Search /></div>
@@ -102,16 +106,20 @@ const CatalogPage: React.FC<CatalogPageProps> = ({ properties }) => {
                           <div className="flex items-center space-x-3">
                               <div className="flex flex-col">
                                   <span className="text-white/40 text-[7px] font-black uppercase tracking-widest">
-                                    {p.category === ListingCategory.STAY ? 'До моря' : p.category === ListingCategory.MOTO ? 'Двигатель' : p.category === ListingCategory.SIM ? 'Трафик' : 'Курсы'}
+                                    {p.category === ListingCategory.STAY ? 'До моря' : 
+                                     p.category === ListingCategory.MOTO ? 'Двигатель' : 
+                                     p.category === ListingCategory.SIM ? 'Трафик' : 
+                                     p.category === ListingCategory.FOOD ? 'Кухня' : 'Курсы'}
                                   </span>
                                   <span className="text-white font-bold text-xs truncate max-w-[150px]">
                                     {p.category === ListingCategory.STAY ? `${p.distanceToSea}м` : 
                                      p.category === ListingCategory.MOTO ? p.engineCapacity : 
                                      p.category === ListingCategory.SIM ? p.dataVolume : 
+                                     p.category === ListingCategory.FOOD ? p.cuisineType : 
                                      p.exchangeRates?.split('|')[0]}
                                   </span>
                               </div>
-                              {p.category === ListingCategory.EXCHANGE && (
+                              {(p.category === ListingCategory.EXCHANGE || p.category === ListingCategory.FOOD) && (
                                 <div className="flex flex-col border-l border-white/10 pl-3">
                                   <span className="text-white/40 text-[7px] font-black uppercase tracking-widest">Работа</span>
                                   <span className="text-white font-bold text-xs">{p.workingHours}</span>
@@ -119,7 +127,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({ properties }) => {
                               )}
                           </div>
                           {p.category !== ListingCategory.EXCHANGE && (
-                            <div className="bg-cyan-500 text-[#020617] px-4 py-2 rounded-2xl font-black text-sm shadow-xl shadow-cyan-500/20">{p.pricePerNight} ₽</div>
+                            <div className="bg-cyan-500 text-[#020617] px-4 py-2 rounded-2xl font-black text-sm shadow-xl shadow-cyan-500/20">
+                                {p.category === ListingCategory.FOOD ? `${p.averageBill} ₽` : `${p.pricePerNight} ₽`}
+                            </div>
                           )}
                           {p.category === ListingCategory.EXCHANGE && (
                             <div className="bg-white/10 text-cyan-400 px-4 py-2 rounded-2xl font-black text-[10px] border border-cyan-500/30 uppercase tracking-widest">Обмен</div>

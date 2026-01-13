@@ -28,7 +28,6 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
     if (!newComment.trim()) return;
     setIsSubmitting(true);
     
-    // Эмуляция задержки отправки для красоты
     setTimeout(() => {
       onAddReview(property.id, { 
         username: user.username, 
@@ -42,6 +41,7 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
   };
 
   const isExchange = property.category === ListingCategory.EXCHANGE;
+  const isFood = property.category === ListingCategory.FOOD;
 
   return (
     <div className="relative pb-48 bg-[#020617]">
@@ -77,22 +77,24 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
                 <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">
                   {property.category === ListingCategory.STAY ? 'До моря' : 
                    property.category === ListingCategory.MOTO ? 'Двигатель' : 
-                   property.category === ListingCategory.SIM ? 'Трафик' : 'Валюты / Курсы'}
+                   property.category === ListingCategory.SIM ? 'Трафик' : 
+                   property.category === ListingCategory.FOOD ? 'Кухня' : 'Валюты / Курсы'}
                 </p>
                 <p className="text-white font-bold leading-tight">
                   {property.category === ListingCategory.STAY ? `${property.distanceToSea} метров` : 
                    property.category === ListingCategory.MOTO ? property.engineCapacity : 
-                   property.category === ListingCategory.SIM ? property.dataVolume : property.exchangeRates}
+                   property.category === ListingCategory.SIM ? property.dataVolume : 
+                   property.category === ListingCategory.FOOD ? property.cuisineType : property.exchangeRates}
                 </p>
             </div>
             <div className="bg-white/5 p-5 rounded-3xl border border-white/5">
                 <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">
                   {property.category === ListingCategory.SIM ? 'Срок действия' : 
-                   property.category === ListingCategory.EXCHANGE ? 'Время работы' : 'Регион'}
+                   (property.category === ListingCategory.EXCHANGE || property.category === ListingCategory.FOOD) ? 'Время работы' : 'Регион'}
                 </p>
                 <p className="text-white font-bold truncate">
                   {property.category === ListingCategory.SIM ? property.validityPeriod : 
-                   property.category === ListingCategory.EXCHANGE ? property.workingHours : property.city}
+                   (property.category === ListingCategory.EXCHANGE || property.category === ListingCategory.FOOD) ? property.workingHours : property.city}
                 </p>
             </div>
             <div className="bg-white/5 p-5 rounded-3xl border border-white/5 col-span-2">
@@ -118,7 +120,6 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
             </div>
         </div>
 
-        {/* Блок написания отзыва */}
         <div className="space-y-6 pt-6 border-t border-white/5">
             <h2 className="text-[10px] font-black text-cyan-500 uppercase tracking-widest">Оставить отзыв</h2>
             <form onSubmit={handleSubmitReview} className="space-y-4 bg-white/5 p-6 rounded-[2.5rem] border border-white/10 shadow-inner">
@@ -157,7 +158,6 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
             </form>
         </div>
 
-        {/* Список отзывов */}
         <div className="space-y-8">
           <h2 className="text-[10px] font-black text-cyan-500 uppercase tracking-widest">Отзывы ({property.reviews.length})</h2>
           <div className="space-y-5">
@@ -201,11 +201,15 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
         <div className="max-w-[320px] mx-auto bg-[#0f172a]/95 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-3 flex items-center justify-between shadow-[0_40px_80px_-15px_rgba(0,0,0,0.9)] pointer-events-auto">
           <div className="pl-5">
             <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">
-              {isExchange ? 'Комиссия / Вход' : 'Стоимость'}
+              {isExchange ? 'Комиссия / Вход' : isFood ? 'Средний чек' : 'Стоимость'}
             </p>
-            <p className="text-lg font-black text-white">{property.pricePerNight} ₽</p>
+            <p className="text-lg font-black text-white">
+                {isFood ? `${property.averageBill} ₽` : `${property.pricePerNight} ₽`}
+            </p>
           </div>
-          <button onClick={handleContactOwner} className="bg-gradient-to-tr from-cyan-600 to-teal-400 text-[#020617] font-black px-8 py-3.5 rounded-[1.75rem] text-xs uppercase tracking-tight active:scale-95 transition-all">Связаться в TG</button>
+          <button onClick={handleContactOwner} className="bg-gradient-to-tr from-cyan-600 to-teal-400 text-[#020617] font-black px-8 py-3.5 rounded-[1.75rem] text-xs uppercase tracking-tight active:scale-95 transition-all">
+              {isFood ? 'Забронировать' : 'Связаться в TG'}
+          </button>
         </div>
       </div>
     </div>

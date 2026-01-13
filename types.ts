@@ -4,6 +4,7 @@ export enum ListingCategory {
   MOTO = 'Мото',
   SIM = 'Сим-карты',
   EXCHANGE = 'Обмен',
+  FOOD = 'Еда',
 }
 
 export enum PropertyType {
@@ -19,6 +20,10 @@ export enum PropertyType {
   CASH = 'Наличные',
   CRYPTO = 'Крипто-обмен',
   BANK_TRANSFER = 'Перевод',
+  RESTAURANT = 'Ресторан',
+  CAFE = 'Кафе',
+  STREET_FOOD = 'Забегаловка',
+  BAR = 'Бар',
 }
 
 export enum ModerationStatus {
@@ -55,6 +60,8 @@ export interface Listing {
   validityPeriod?: string;
   exchangeRates?: string;
   workingHours?: string;
+  cuisineType?: string;
+  averageBill?: number;
   maxGuests?: number;
   amenities: string[];
   images: string[];
@@ -69,9 +76,13 @@ export interface Listing {
 
 export interface User {
   id: string;
+  telegramId?: number;
   username: string;
+  firstName?: string;
+  lastName?: string;
+  photoUrl?: string;
   role: 'guest' | 'owner' | 'admin';
-  isBanned?: boolean; // New field for admin control
+  isBanned?: boolean;
 }
 
 export interface FilterState {

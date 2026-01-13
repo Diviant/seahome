@@ -35,6 +35,12 @@ const OwnerDashboardPage: React.FC<OwnerDashboardPageProps> = ({ properties }) =
           'Качественные фото террасы увеличивают охват',
           'Указывайте наличие кондиционера в заголовке'
         ];
+      case ListingCategory.FOOD:
+        return [
+          'Фотографии блюд должны быть яркими и аппетитными',
+          'Прикрепите фото меню или ссылку на него в описании',
+          'Укажите наличие детских кресел или площадки для семей'
+        ];
       case ListingCategory.MOTO:
         return [
           'Укажите год выпуска и состояние шлемов',
@@ -86,7 +92,10 @@ const OwnerDashboardPage: React.FC<OwnerDashboardPageProps> = ({ properties }) =
              <div className="flex -space-x-2">
                 {[...new Set(properties.map(p => p.category))].map(cat => (
                   <div key={cat} className="w-8 h-8 rounded-full border-2 border-indigo-700 bg-slate-900 flex items-center justify-center text-[10px] shadow-lg">
-                    {cat === ListingCategory.STAY ? '🏠' : cat === ListingCategory.MOTO ? '🛵' : cat === ListingCategory.SIM ? '📶' : '💰'}
+                    {cat === ListingCategory.STAY ? '🏠' : 
+                     cat === ListingCategory.FOOD ? '🍴' : 
+                     cat === ListingCategory.MOTO ? '🛵' : 
+                     cat === ListingCategory.SIM ? '📶' : '💰'}
                   </div>
                 ))}
              </div>
@@ -126,7 +135,10 @@ const OwnerDashboardPage: React.FC<OwnerDashboardPageProps> = ({ properties }) =
                   <div className="relative w-20 h-20 rounded-2xl overflow-hidden shrink-0 border border-white/5">
                      <img src={p.images[0]} className="w-full h-full object-cover opacity-80" />
                      <div className="absolute top-1 left-1 bg-black/60 backdrop-blur-md p-1 rounded-lg text-[8px]">
-                        {activeTab === ListingCategory.STAY ? '🏠' : activeTab === ListingCategory.MOTO ? '🛵' : activeTab === ListingCategory.SIM ? '📶' : '💰'}
+                        {activeTab === ListingCategory.STAY ? '🏠' : 
+                         activeTab === ListingCategory.FOOD ? '🍴' : 
+                         activeTab === ListingCategory.MOTO ? '🛵' : 
+                         activeTab === ListingCategory.SIM ? '📶' : '💰'}
                      </div>
                   </div>
                   <div className="flex-1 min-w-0 space-y-1">
@@ -135,9 +147,8 @@ const OwnerDashboardPage: React.FC<OwnerDashboardPageProps> = ({ properties }) =
                         <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest truncate">{p.city}</span>
                         <span className="text-slate-700">•</span>
                         <span className="text-[9px] text-cyan-500 font-bold">
-                          {p.category === ListingCategory.STAY ? `${p.pricePerNight} ₽/сут` : 
-                           p.category === ListingCategory.MOTO ? `${p.pricePerNight} ₽/сут` : 
-                           p.category === ListingCategory.SIM ? `${p.pricePerNight} ₽` : 'Курс обновлен'}
+                          {p.category === ListingCategory.FOOD ? `Чек: ${p.averageBill} ₽` : 
+                           p.category === ListingCategory.EXCHANGE ? 'Обмен' : `${p.pricePerNight} ₽`}
                         </span>
                     </div>
                     <div className="flex items-center pt-1">{getStatusBadge(p.status)}</div>
