@@ -18,7 +18,7 @@ export const REGION_METADATA: Record<string, { image: string, tag: string }> = {
     tag: 'Дворцы и горы'
   },
   'Краснодарский край': { 
-    image: 'https://images.unsplash.com/photo-1543967354-28b9260d50c6?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?auto=format&fit=crop&w=800&q=80',
     tag: 'Центр отдыха'
   },
   'Кавказские Минеральные Воды': { 
@@ -46,7 +46,7 @@ export const REGION_METADATA: Record<string, { image: string, tag: string }> = {
     tag: 'Острова и Будда'
   },
   'Малайзия': {
-    image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=800&q=80',
     tag: 'Джунгли и небоскребы'
   },
   'Индонезия': {

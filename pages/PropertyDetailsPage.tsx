@@ -95,6 +95,13 @@ const PropertyDetailsPage: React.FC<PropertyDetailsPageProps> = ({ properties, u
                    property.category === ListingCategory.EXCHANGE ? property.workingHours : property.city}
                 </p>
             </div>
+            <div className="bg-white/5 p-5 rounded-3xl border border-white/5 col-span-2">
+                <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Точный адрес</p>
+                <div className="flex items-center space-x-2 text-white font-bold text-sm">
+                    <Icons.MapPin />
+                    <span>{property.address}</span>
+                </div>
+            </div>
         </div>
 
         <div className="space-y-4">

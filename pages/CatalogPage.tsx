@@ -93,7 +93,11 @@ const CatalogPage: React.FC<CatalogPageProps> = ({ properties }) => {
                   </div>
 
                   <div className="absolute bottom-6 left-6 right-6">
-                      <h3 className="text-white font-extrabold text-2xl tracking-tight mb-2 leading-tight">{p.title}</h3>
+                      <h3 className="text-white font-extrabold text-2xl tracking-tight mb-1 leading-tight">{p.title}</h3>
+                      <div className="flex items-center space-x-1.5 mb-3 opacity-70">
+                          <Icons.MapPin />
+                          <span className="text-[10px] font-medium text-slate-300 truncate">{p.address}</span>
+                      </div>
                       <div className="flex justify-between items-center">
                           <div className="flex items-center space-x-3">
                               <div className="flex flex-col">
