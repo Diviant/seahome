@@ -8,15 +8,8 @@ export const generateDescription = async (details: {
   distanceToSea: number
 }) => {
   try {
-    // Безопасно получаем ключ, не вызывая краш приложения
-    const apiKey = (window as any).process?.env?.API_KEY || "";
-    
-    if (!apiKey) {
-      console.warn("SeaHome: API Key missing, AI generation disabled.");
-      return "Описание будет добавлено владельцем в ближайшее время.";
-    }
-
-    const ai = new GoogleGenAI({ apiKey });
+    // Fix: Initialize GoogleGenAI directly using process.env.API_KEY as per the @google/genai coding guidelines.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Напиши привлекательное описание для объявления о сдаче жилья у моря. 
